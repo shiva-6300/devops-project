@@ -10,9 +10,21 @@ pipeline {
             }
         }
 
+        stage('Verify Project') {
+            steps {
+                sh '''
+                    pwd
+                    ls -la
+                    find . -name pom.xml
+                '''
+            }
+        }
+
         stage('Compile') {
             steps {
-                sh 'mvn clean compile'
+                dir('FullStack-Blogging-App') {
+                    sh 'mvn clean compile'
+                }
             }
         }
 
