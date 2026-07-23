@@ -8,9 +8,10 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.14</version>
         <relativePath/>
     </parent>
+
 
     <groupId>com.example</groupId>
     <artifactId>twitter-app</artifactId>
@@ -19,79 +20,98 @@
     <name>twitter-app</name>
     <description>Demo project for Spring Boot</description>
 
+
     <properties>
+
         <java.version>17</java.version>
+
+        <!-- Security patched versions -->
+        <spring-framework.version>6.2.11</spring-framework.version>
+        <spring-security.version>6.5.4</spring-security.version>
+
+        <!-- Dependency fixes -->
+        <jackson.version>2.21.4</jackson.version>
+        <tomcat.version>10.1.55</tomcat.version>
+        <thymeleaf.version>3.1.4.RELEASE</thymeleaf.version>
+        <logback.version>1.5.19</logback.version>
+
         <jacoco.version>0.8.13</jacoco.version>
+
     </properties>
+
 
     <dependencies>
 
-        <!-- Spring Data JPA -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Spring Security -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- Thymeleaf -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!-- Spring Web -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Thymeleaf Security Extras -->
+
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
 
-        <!-- H2 Database -->
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Testing -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- Security Testing -->
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
 
+
     </dependencies>
 
 
+
     <build>
+
         <plugins>
 
-            <!-- Spring Boot Plugin -->
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
 
-            <!-- JaCoCo Code Coverage -->
+
             <plugin>
+
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
@@ -103,6 +123,7 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+
 
                     <execution>
                         <id>report</id>
@@ -116,8 +137,11 @@
 
             </plugin>
 
+
         </plugins>
+
     </build>
+
 
 
     <distributionManagement>
@@ -127,10 +151,12 @@
             <url>http://18.61.72.143:8081/repository/maven-releases/</url>
         </repository>
 
+
         <snapshotRepository>
             <id>maven-snapshots</id>
             <url>http://18.61.72.143:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
+
 
     </distributionManagement>
 
