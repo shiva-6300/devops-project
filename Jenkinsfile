@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
+        IMAGE_NAME = "shivavaddi/shiva:latest"
     }
 
     stages {
@@ -90,13 +91,37 @@ pipeline {
             }
         }
 
-        stage('Trivy File System Scan') {
+        stage('Docker Build & Tag') {
             steps {
-                sh '''
-                    trivy fs \
-                    --format table \
-                    -o trivy-fs-report.html .
-                '''
+                dir('FullStack-Blogging-App') {
+                    script {
+                        withDockerRegistry(
+                            credentialsId: 'dockerhub-cred',
+                            url: 'https://index.docker.io/v1/'
+                        ) {
+                            sh "docker build -t ${IMAGE_NAME} ."
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Trivy Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-image-report.html ${IMAGE_NAME}"
+            }
+        }
+
+        stage('Docker Push Image') {
+            steps {
+                script {
+                    withDockerRegistry(
+                        credentialsId: 'dockerhub-cred',
+                        url: 'https://index.docker.io/v1/'
+                    ) {
+                        sh "docker push ${IMAGE_NAME}"
+                    }
+                }
             }
         }
 
@@ -104,7 +129,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'trivy-fs-report.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'trivy-image-report.html', allowEmptyArchive: true
         }
 
         success {
