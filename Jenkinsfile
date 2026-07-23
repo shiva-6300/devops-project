@@ -22,8 +22,11 @@ pipeline {
         stage('Verify Project') {
             steps {
                 sh '''
+                    echo "Current Workspace:"
                     pwd
+                    echo "Workspace Files:"
                     ls -la
+                    echo "Searching for pom.xml..."
                     find . -name pom.xml
                 '''
             }
@@ -54,8 +57,8 @@ pipeline {
                     withSonarQubeEnv('sonarqubeServer') {
                         sh '''
                             $SCANNER_HOME/bin/sonar-scanner \
-                            -Dsonar.projectName=Blogging-app \
                             -Dsonar.projectKey=Blogging-app \
+                            -Dsonar.projectName=Blogging-app \
                             -Dsonar.sources=src \
                             -Dsonar.java.binaries=target/classes
                         '''
@@ -64,10 +67,52 @@ pipeline {
             }
         }
 
+        stage('Build') {
+            steps {
+                dir('FullStack-Blogging-App') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Publish Artifacts') {
+            steps {
+                dir('FullStack-Blogging-App') {
+                    withMaven(
+                        jdk: 'jdk',
+                        maven: 'maven',
+                        globalMavenSettingsConfig: 'maven-settings',
+                        traceability: true
+                    ) {
+                        sh 'mvn deploy'
+                    }
+                }
+            }
+        }
+
         stage('Trivy File System Scan') {
             steps {
-                sh 'trivy fs --format table -o trivy-fs-report.html .'
+                sh '''
+                    trivy fs \
+                    --format table \
+                    -o trivy-fs-report.html .
+                '''
             }
+        }
+
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'trivy-fs-report.html', allowEmptyArchive: true
+        }
+
+        success {
+            echo 'Pipeline executed successfully.'
+        }
+
+        failure {
+            echo 'Pipeline execution failed.'
         }
     }
 }
