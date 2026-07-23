@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Git Checkout') {
             steps {
                 git branch: 'main',
@@ -9,10 +10,17 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Compile') {
             steps {
-                echo 'Build stage'
+                sh 'mvn clean compile'
             }
         }
+
+        stage('Trivy File System Scan') {
+            steps {
+                sh 'trivy fs --format table -o trivy-fs-report.html .'
+            }
+        }
+
     }
 }
