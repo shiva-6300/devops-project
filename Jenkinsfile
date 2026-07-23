@@ -116,7 +116,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(
-                        credentialsId: 'dockerhub-cred',
+                        credentialsId: 'docker-cred',
                         url: 'https://index.docker.io/v1/'
                     ) {
                         sh "docker push ${IMAGE_NAME}"
