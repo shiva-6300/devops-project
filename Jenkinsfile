@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'jdk'
+        maven 'maven'
+    }
+
     stages {
 
         stage('Git Checkout') {
@@ -16,6 +21,17 @@ pipeline {
                     pwd
                     ls -la
                     find . -name pom.xml
+                '''
+            }
+        }
+
+        stage('Check Java Version') {
+            steps {
+                sh '''
+                    echo "JAVA_HOME=$JAVA_HOME"
+                    java -version
+                    javac -version
+                    mvn -version
                 '''
             }
         }
