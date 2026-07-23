@@ -6,6 +6,10 @@ pipeline {
         maven 'maven'
     }
 
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+
     stages {
 
         stage('Git Checkout') {
@@ -44,11 +48,26 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                dir('FullStack-Blogging-App') {
+                    withSonarQubeEnv('sonarqubeServer') {
+                        sh '''
+                            $SCANNER_HOME/bin/sonar-scanner \
+                            -Dsonar.projectName=Blogging-app \
+                            -Dsonar.projectKey=Blogging-app \
+                            -Dsonar.sources=src \
+                            -Dsonar.java.binaries=target/classes
+                        '''
+                    }
+                }
+            }
+        }
+
         stage('Trivy File System Scan') {
             steps {
                 sh 'trivy fs --format table -o trivy-fs-report.html .'
             }
         }
-
     }
 }
