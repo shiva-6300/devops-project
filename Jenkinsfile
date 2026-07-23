@@ -96,7 +96,7 @@ pipeline {
                 dir('FullStack-Blogging-App') {
                     script {
                         withDockerRegistry(
-                            credentialsId: 'docker-cred',
+                            credentialsId: 'docker',
                             url: 'https://index.docker.io/v1/'
                         ) {
                             sh "docker build -t ${IMAGE_NAME} ."
@@ -116,7 +116,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(
-                        credentialsId: 'docker-cred',
+                        credentialsId: 'docker',
                         url: 'https://index.docker.io/v1/'
                     ) {
                         sh "docker push ${IMAGE_NAME}"
