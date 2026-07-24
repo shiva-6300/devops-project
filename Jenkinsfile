@@ -142,7 +142,7 @@ pipeline {
                         '''
 
                         sh '''
-                            kubectl rollout status deployment/blogging-app -n webapps --timeout=300s
+                            sh 'kubectl rollout status deployment/bloggingapp-deployment -n webapps --timeout=300s'
                         '''
                     }
                 }
