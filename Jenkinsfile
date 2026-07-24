@@ -127,24 +127,16 @@ pipeline {
 
         stage('K8s Deploy') {
             steps {
-                dir('FullStack-Blogging-App') {
-                    withKubeCredentials(kubectlCredentials: [[
-                        caCertificate: '',
-                        clusterName: 'devopsshack-cluster',
-                        contextName: '',
-                        credentialsId: 'k8s-token',
-                        namespace: 'webapps',
-                        serverUrl: 'https://E62F50A2F68F2469E591D2B8A7FBB607.sk1.ap-south-2.eks.amazonaws.com'
-                    ]]) {
-
-                        sh '''
-                            kubectl apply -f deployment-service.yml -n webapps
-                        '''
-
-                        sh '''
-                            sh 'kubectl rollout status deployment/bloggingapp-deployment -n webapps --timeout=300s'
-                        '''
-                    }
+                withKubeCredentials(kubectlCredentials: [[
+                    caCertificate: '',
+                    clusterName: 'devopsshack-cluster',
+                    contextName: '',
+                    credentialsId: 'k8s-token',
+                    namespace: 'webapps',
+                    serverUrl: 'https://E62F50A2F68F2469E591D2B8A7FBB607.sk1.ap-south-2.eks.amazonaws.com'
+                ]]) {
+                    sh "kubectl apply -f deployment-service.yml -n webapps"
+                    sleep 20
                 }
             }
         }
@@ -159,11 +151,8 @@ pipeline {
                     namespace: 'webapps',
                     serverUrl: 'https://E62F50A2F68F2469E591D2B8A7FBB607.sk1.ap-south-2.eks.amazonaws.com'
                 ]]) {
-
-                    sh 'kubectl get nodes'
-                    sh 'kubectl get pods -n webapps'
-                    sh 'kubectl get svc -n webapps'
-                    sh 'kubectl get deployments -n webapps'
+                    sh "kubectl get pods -n webapps"
+                    sh "kubectl get svc -n webapps"
                 }
             }
         }
