@@ -134,7 +134,7 @@ pipeline {
                         contextName: '',
                         credentialsId: 'k8s-token',
                         namespace: 'webapps',
-                        serverUrl: 'https://E62F50A2F68F2469E591D2B8A7FBB607.sk1.ap-south-2.eks.amazonaws.com'
+                        serverUrl: 'https://BF78F90015D6B916076B029034C94F3F.yl4.ap-south-2.eks.amazonaws.com'
                     ]]) {
 
                         sh 'pwd'
